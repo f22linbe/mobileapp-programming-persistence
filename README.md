@@ -1,42 +1,78 @@
 
 # Rapport
 
-**Skriv din rapport här!**
+** För att skapa egna tabeller användes metoder för att hämta värdet i textredigering objekten.
+Dessa sattes sedan in i databastabellen med hjälp av en knapp och DatabaseHelper klassen. För
+att sedan visa tabellen användes en knapp för att skapa en ny vy på tabellen, med hjälp av en cursor 
+och en while-iteration skriver man ut resultatet i databasen. Resultatet skrivs sedan ut i text vyn.
+som loopar alla och skriver ut. (se Kodsegment 1, 2 & skärmdumpar) **
 
-_Du kan ta bort all text som finns sedan tidigare_.
 
-## Följande grundsyn gäller dugga-svar:
 
-- Ett kortfattat svar är att föredra. Svar som är längre än en sida text (skärmdumpar och programkod exkluderat) är onödigt långt.
-- Svaret skall ha minst en snutt programkod.
-- Svaret skall inkludera en kort övergripande förklarande text som redogör för vad respektive snutt programkod gör eller som svarar på annan teorifråga.
-- Svaret skall ha minst en skärmdump. Skärmdumpar skall illustrera exekvering av relevant programkod. Eventuell text i skärmdumpar måste vara läsbar.
-- I de fall detta efterfrågas, dela upp delar av ditt svar i för- och nackdelar. Dina för- respektive nackdelar skall vara i form av punktlistor med kortare stycken (3-4 meningar).
-
-Programkod ska se ut som exemplet nedan. Koden måste vara korrekt indenterad då den blir lättare att läsa vilket gör det lättare att hitta syntaktiska fel.
-
+# Kodsegment 1:
 ```
-function errorCallback(error) {
-    switch(error.code) {
-        case error.PERMISSION_DENIED:
-            // Geolocation API stöds inte, gör något
-            break;
-        case error.POSITION_UNAVAILABLE:
-            // Misslyckat positionsanrop, gör något
-            break;
-        case error.UNKNOWN_ERROR:
-            // Okänt fel, gör något
-            break;
-    }
-}
+// Insert rows to table
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText islandName = findViewById(R.id.editName);
+                EditText islandLocation = findViewById(R.id.editLocation);
+                EditText islandSize = findViewById(R.id.editSize);
+
+                String name = islandName.getText().toString();
+                String location = islandLocation.getText().toString();
+                String size = islandSize.getText().toString();
+
+                try (DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+                     SQLiteDatabase database = databaseHelper.getWritableDatabase()) {
+
+                    ContentValues values = new ContentValues();
+                    values.put(DatabaseTables.Island.COLUMN_NAME_NAME, name);
+                    values.put(DatabaseTables.Island.COLUMN_NAME_LOCATION, location);
+                    values.put(DatabaseTables.Island.COLUMN_NAME_SIZE, size);
+
+                    long newTableRow = database.insert(DatabaseTables.Island.TABLE_NAME, null, values);
+                }
+            }
+        });
+```
+# Kodsegment 2:
+```
+// Display Table
+        Button readTableButton = findViewById(R.id.readButton);
+        readTableButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                DatabaseHelper databaseHelper = new DatabaseHelper(getApplicationContext());
+                SQLiteDatabase database = databaseHelper.getReadableDatabase();
+
+                Cursor cursor = database.query(DatabaseTables.Island.TABLE_NAME,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                );
+
+                StringBuilder tableContent = new StringBuilder();
+
+                while (cursor.moveToNext()) {
+                    String columnName = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseTables.Island.COLUMN_NAME_NAME));
+                    String columnLocation = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseTables.Island.COLUMN_NAME_LOCATION));
+                    String columnSize = cursor.getString(cursor.getColumnIndexOrThrow(DatabaseTables.Island.COLUMN_NAME_SIZE));
+                    tableContent.append(columnName).append(", ").append(columnLocation).append(" ").append(columnSize).append(" km²").append("\n");
+                }
+                cursor.close();
+                database.close();
+
+                TextView islandTextView = findViewById(R.id.viewTable);
+                islandTextView.setText(tableContent.toString());
+            }
+        });
 ```
 
-Bilder läggs i samma mapp som markdown-filen.
 
-![](android.png)
-
-Läs gärna:
-
-- Boulos, M.N.K., Warren, J., Gong, J. & Yue, P. (2010) Web GIS in practice VIII: HTML5 and the canvas element for interactive online mapping. International journal of health geographics 9, 14. Shin, Y. &
-- Wunsche, B.C. (2013) A smartphone-based golf simulation exercise game for supporting arthritis patients. 2013 28th International Conference of Image and Vision Computing New Zealand (IVCNZ), IEEE, pp. 459–464.
-- Wohlin, C., Runeson, P., Höst, M., Ohlsson, M.C., Regnell, B., Wesslén, A. (2012) Experimentation in Software Engineering, Berlin, Heidelberg: Springer Berlin Heidelberg.
+![](Screenshot_adding_islands.png)
+![](Screenshot_adding_second_island.png)
+![](Screenshot_reading_table.png)
