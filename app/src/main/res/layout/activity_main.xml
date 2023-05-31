@@ -7,49 +7,53 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/viewTable"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/island_table"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/insertButton" />
     <EditText
-        android:id="@+id/edit1"
+        android:id="@+id/editName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="Enter Name" />
     <EditText
-        android:id="@+id/edit2"
+        android:id="@+id/editLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/edit1"
+        app:layout_constraintTop_toBottomOf="@id/editName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="Enter Location" />
     <EditText
-        android:id="@+id/edit3"
+        android:id="@+id/editSize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/edit2"
+        app:layout_constraintTop_toBottomOf="@id/editLocation"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:autofillHints="Enter Size" />
     <Button
-        android:id="@+id/read_button"
+        android:id="@+id/readButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/read"
-        app:layout_constraintTop_toBottomOf="@id/edit3"
-        app:layout_constraintStart_toEndOf="@id/write_button"
+        app:layout_constraintTop_toBottomOf="@id/editSize"
+        app:layout_constraintStart_toEndOf="@id/insertButton"
         app:layout_constraintEnd_toEndOf="parent"/>
     <Button
-        android:id="@+id/write_button"
+        android:id="@+id/insertButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/write"
-        app:layout_constraintTop_toBottomOf="@id/edit3"
+        android:text="@string/insert"
+        app:layout_constraintTop_toBottomOf="@id/editSize"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/read_button"/>
+        app:layout_constraintEnd_toStartOf="@id/readButton"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,7 @@
 package com.example.persistence;
 
+import android.content.Intent;
+
 import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
@@ -19,7 +21,7 @@ public class Island {
     public Island(String _name, String _location, int _size) {
         name=_name;
         location=_location;
-        squarekm=_size;
+        squarekm= Integer.parseInt(Integer.toString(_size));
     }
 
 
